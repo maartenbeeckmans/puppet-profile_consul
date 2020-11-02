@@ -105,6 +105,7 @@ class profile_consul (
         dport    => 8600,
         action   => accept,
         protocol => 'udp',
+      }
     }
   }
   create_resources(consul::check, $checks)
