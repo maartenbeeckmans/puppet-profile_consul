@@ -21,7 +21,10 @@ class profile_consul (
   String                     $version                    = '1.8.5',
   Boolean                    $ui                         = true,
   Hash                       $watches                    = {},
-  Boolean                    $manage_repo                = false,
+  Boolean                    $manage_repo                = true,
+  String                     $repo_gpg_key               = 'E8A032E094D8EB4EA189D270DA418C88A3219F7B',
+  Stdlib::HTTPUrl            $repo_gpg_url               = 'https://apt.releases.hashicorp.com',
+  Stdlib::HTTPUrl            $repo_url                   = 'https://apt.releases.hashicorp.com',
 ) {
   if $connect {
     $_connect_config = {
@@ -40,6 +43,18 @@ class profile_consul (
   } else {
     $_config = $config
   }
+  if $manage_repo {
+    if ! defined(Apt::Source['Hashicorp']) {
+      apt::source { 'Hashicorp':
+        location => $repo_url,
+        repos    => 'main',
+        key      => {
+          id     => $repo_gpg_key,
+          server => $repo_gpg_url,
+        }
+      }
+    }
+  }
   class { 'consul':
     config_defaults => $config_defaults,
     config_dir      => $config_dir,
@@ -48,13 +63,6 @@ class profile_consul (
     join_wan        => $join_wan,
     version         => $version,
     install_method  => 'package',
-  }
-  if $manage_repo {
-    if ! defined(Apt::Source['Hashicorp']) {
-      apt::source {'Hashicorp':
-        location => 'https://apt.releases.hashicorp.com',
-        repos    => 'main',
-    }
   }
   if $server {
     if $manage_firewall_entry {
