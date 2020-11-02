@@ -63,6 +63,7 @@ class profile_consul (
     join_wan        => $join_wan,
     version         => $version,
     install_method  => 'package',
+    bin_dir         => '/usr/bin',
   }
   if $server {
     if $manage_firewall_entry {
