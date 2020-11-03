@@ -91,7 +91,7 @@ class profile_consul (
         consul::service { $sd_service_name:
           checks => [
             {
-              http     => "http://${facts['networking']['fqdn']}:8500",
+              http     => "http://${facts['networking']['ip']}:8500",
               interval => '10s',
             }
           ],
