@@ -102,7 +102,7 @@ class profile_consul (
     }
     if $manage_firewall_entry {
       firewall { '08301 allow consul serf LAN':
-        dport  => 8600,
+        dport  => 8301,
         action => accept,
       }
       firewall { '08600 allow consul DNS TCP':
