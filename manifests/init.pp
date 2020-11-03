@@ -106,14 +106,14 @@ class profile_consul (
         action => accept,
       }
       firewall { '08600 allow consul DNS TCP':
-        dport    => 8600,
-        action   => accept,
-        protocol => 'tcp',
+        dport  => 8600,
+        action => accept,
+        proto  => 'tcp',
       }
       firewall { '08600 allow consul DNS UDP':
-        dport    => 8600,
-        action   => accept,
-        protocol => 'udp',
+        dport  => 8600,
+        action => accept,
+        proto  => 'udp',
       }
     }
   }
