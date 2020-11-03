@@ -23,7 +23,7 @@ class profile_consul (
   Hash                       $watches                    = {},
   Boolean                    $manage_repo                = true,
   String                     $repo_gpg_key               = 'E8A032E094D8EB4EA189D270DA418C88A3219F7B',
-  Stdlib::HTTPUrl            $repo_gpg_url               = 'https://apt.releases.hashicorp.com',
+  Stdlib::HTTPUrl            $repo_gpg_url               = 'https://apt.releases.hashicorp.com/gpg',
   Stdlib::HTTPUrl            $repo_url                   = 'https://apt.releases.hashicorp.com',
 ) {
   if $connect {
