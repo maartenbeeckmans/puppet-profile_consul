@@ -4,7 +4,7 @@ class profile_consul (
   Hash                       $config                     = {},
   Hash                       $config_defaults            = {
     'data_dir'   => '/var/lib/consul',
-    'datacenter' => 'beeckmans.io',
+    'datacenter' => 'beeckmans',
   },
   Stdlib::Absolutepath       $config_dir                 = '/etc/consul.d',
   Boolean                    $connect                    = false,
