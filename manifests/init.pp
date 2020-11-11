@@ -32,28 +32,8 @@ class profile_consul (
       'ports'   => { 'grpc' => $connect_grpc_port },
     }
     $_config = deep_merge($_connect_config, $config)
-    firewall { '08502 allow consul connect':
-      dport  => 8502,
-      action => 'accept',
-    }
-    firewall { '08502 allow consul connect sidecars':
-      dport  => [$connect_sidecar_port_range],
-      action => 'accept',
-    }
   } else {
     $_config = $config
-  }
-  if $manage_repo {
-    if ! defined(Apt::Source['Hashicorp']) {
-      apt::source { 'Hashicorp':
-        location => $repo_url,
-        repos    => 'main',
-        key      => {
-          id     => $repo_gpg_key,
-          server => $repo_gpg_url,
-        }
-      }
-    }
   }
   class { 'consul':
     config_defaults => $config_defaults,
@@ -65,56 +45,22 @@ class profile_consul (
     install_method  => 'package',
     bin_dir         => '/usr/bin',
   }
-  if $server {
-    if $manage_firewall_entry {
-      firewall { '08300 allow consul rpc':
-        dport  => 8300,
-        action => 'accept',
-      }
-    }
-    if $join_wan {
-      if $manage_firewall_entry {
-        firewall { '08302 allow consul serf WAN':
-          dport  => 8302,
-          action => 'accept',
+  if $manage_firewall_entry {
+    include profile_consul::firewall
+  }
+  if $manage_repo {
+    include profile_consul::repo
+  }
+  if $manage_sd_service {
+    consul::service { $sd_service_name:
+      checks => [
+        {
+          http     => "http://${facts['networking']['ip']}:8500",
+          interval => '10s',
         }
-      }
-    }
-    if $ui {
-      if $manage_firewall_entry {
-        firewall { '08500 allow consul ui':
-          dport  => 8500,
-          action => 'accept',
-        }
-      }
-      if $manage_sd_service {
-        consul::service { $sd_service_name:
-          checks => [
-            {
-              http     => "http://${facts['networking']['ip']}:8500",
-              interval => '10s',
-            }
-          ],
-          port   => 8500,
-          tags   => $sd_service_tags,
-        }
-      }
-    }
-    if $manage_firewall_entry {
-      firewall { '08301 allow consul serf LAN':
-        dport  => 8301,
-        action => accept,
-      }
-      firewall { '08600 allow consul DNS TCP':
-        dport  => 8600,
-        action => accept,
-        proto  => 'tcp',
-      }
-      firewall { '08600 allow consul DNS UDP':
-        dport  => 8600,
-        action => accept,
-        proto  => 'udp',
-      }
+      ],
+      port   => 8500,
+      tags   => $sd_service_tags,
     }
   }
   create_resources(consul::check, $checks)
