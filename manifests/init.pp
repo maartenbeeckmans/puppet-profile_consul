@@ -21,6 +21,9 @@ class profile_consul (
   String                     $version                    = '1.8.5',
   Boolean                    $ui                         = true,
   Hash                       $watches                    = {},
+  Optional[String]           $root_ca_cert               = undef,
+  Optional[String]           $consul_cert                = undef,
+  Optional[String]           $consul_key                 = undef,
   Boolean                    $manage_repo                = true,
   String                     $repo_gpg_key               = 'E8A032E094D8EB4EA189D270DA418C88A3219F7B',
   Stdlib::HTTPUrl            $repo_gpg_url               = 'https://apt.releases.hashicorp.com/gpg',
@@ -34,6 +37,9 @@ class profile_consul (
     $_config = deep_merge($_connect_config, $config)
   } else {
     $_config = $config
+  }
+  if $root_ca_cert and $consul_cert and $consul_key {
+    include profile_consul::certs
   }
   class { 'consul':
     config_defaults => $config_defaults,
@@ -62,6 +68,12 @@ class profile_consul (
       port   => 8500,
       tags   => $sd_service_tags,
     }
+  }
+
+  file { '/etc/profile.d/consul.sh':
+    ensure  => file,
+    mode    => '0644',
+    content => "export CONSUL_HTTP_ADDR=https:///127.0.0.1:8500\nexport CONSUL_CACERT=/etc/ssl/certs/consul/root-ca-cert.pem"
   }
   create_resources(consul::check, $checks)
   create_resources(consul::service, $services)
