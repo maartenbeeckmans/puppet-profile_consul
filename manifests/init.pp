@@ -73,7 +73,7 @@ class profile_consul (
   file { '/etc/profile.d/consul.sh':
     ensure  => file,
     mode    => '0644',
-    content => "export CONSUL_HTTP_ADDR=https:///127.0.0.1:8500\nexport CONSUL_CACERT=/etc/ssl/certs/consul/root-ca-cert.pem"
+    content => "export CONSUL_HTTP_ADDR=https:///127.0.0.1:8500"
   }
   create_resources(consul::check, $checks)
   create_resources(consul::service, $services)
