@@ -1,56 +1,53 @@
 #
 class profile_consul (
-  Hash                       $checks                     = {},
-  Hash                       $config                     = {},
-  Hash                       $config_defaults            = {
-    'data_dir'   => '/var/lib/consul',
-    'datacenter' => 'beeckmans',
-  },
-  Stdlib::Absolutepath       $config_dir                 = '/etc/consul.d',
-  Boolean                    $connect                    = false,
-  Stdlib::Port::Unprivileged $connect_grpc_port          = 8502,
-  String                     $connect_sidecar_port_range = '21000-21255',
-  Optional[String[1]]        $join_wan                   = undef,
-  Boolean                    $manage_firewall_entry      = true,
-  Boolean                    $manage_sd_service          = false,
-  String                     $options                    = '-enable-script-checks -syslog',
-  String                     $sd_service_name            = 'consul-ui',
-  Array                      $sd_service_tags            = [],
-  Boolean                    $server                     = false,
-  Hash                       $services                   = {},
-  String                     $version                    = '1.8.5',
-  Boolean                    $ui                         = true,
-  Hash                       $watches                    = {},
-  Optional[String]           $root_ca_cert               = undef,
-  Optional[String]           $consul_cert                = undef,
-  Optional[String]           $consul_key                 = undef,
-  Boolean                    $manage_repo                = true,
-  String                     $repo_gpg_key               = 'E8A032E094D8EB4EA189D270DA418C88A3219F7B',
-  Stdlib::HTTPUrl            $repo_gpg_url               = 'https://apt.releases.hashicorp.com/gpg',
-  Stdlib::HTTPUrl            $repo_url                   = 'https://apt.releases.hashicorp.com',
+  String                     $bind_address,
+  Array[String]              $agent_nodes,
+  Array[String]              $server_nodes,
+  Stdlib::Absolutepath       $root_ca_file,
+  Stdlib::Absolutepath       $cert_file,
+  Stdlib::Absolutepath       $key_file,
+  Stdlib::Absolutepath       $certs_dir,
+  String                     $root_ca_cert,
+  String                     $consul_cert,
+  String                     $consul_key,
+  String                     $client_address,
+  Stdlib::Absolutepath       $data_dir,
+  String                     $datacenter,
+  String                     $encrypt_key,
+  String                     $node_name,
+  Boolean                    $server,
+  Boolean                    $ui,
+  String                     $user,
+  String                     $group,
+  Boolean                    $manage_user,
+  Boolean                    $manage_group,
+  Boolean                    $connect,
+  Stdlib::Port::Unprivileged $connect_grpc_port,
+  String                     $connect_sidecar_port_range,
+  Stdlib::Absolutepath       $config_dir,
+  String                     $options,
+  Optional[String[1]]        $join_wan,
+  String                     $version,
+  Boolean                    $manage_firewall_entry,
+  Boolean                    $manage_repo,
+  String                     $repo_gpg_key,
+  Stdlib::HTTPUrl            $repo_gpg_url,
+  Stdlib::HTTPUrl            $repo_url,
+  Boolean                    $manage_sd_service,
+  String                     $sd_service_name,
+  Array[String]              $sd_service_tags,
+  Hash                       $checks,
+  Hash                       $services,
+  Hash                       $watches,
 ) {
-  if $connect {
-    $_connect_config = {
-      'connect' => { 'enabled' => true },
-      'ports'   => { 'grpc' => $connect_grpc_port },
-    }
-    $_config = deep_merge($_connect_config, $config)
+  if $server {
+    include profile_consul::server
   } else {
-    $_config = $config
+    include profile_consul::agent
   }
-  if $root_ca_cert and $consul_cert and $consul_key {
-    include profile_consul::certs
-  }
-  class { 'consul':
-    config_defaults => $config_defaults,
-    config_dir      => $config_dir,
-    config_hash     => $_config,
-    extra_options   => $options,
-    join_wan        => $join_wan,
-    version         => $version,
-    install_method  => 'package',
-    bin_dir         => '/usr/bin',
-  }
+
+  include profile_consul::certs
+
   if $manage_firewall_entry {
     include profile_consul::firewall
   }

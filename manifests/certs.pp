@@ -2,35 +2,33 @@
 #
 #
 class profile_consul::certs (
-  Optional[String] $root_ca_cert = undef,
-  Optional[String] $consul_cert  = undef,
-  Optional[String] $consul_key   = undef,
+  Stdlib::Absolutepath $root_ca_file = $::profile_consul::root_ca_file,
+  Stdlib::Absolutepath $cert_file    = $::profile_consul::cert_file,
+  Stdlib::Absolutepath $key_file     = $::profile_consul::key_file,
+  Stdlib::Absolutepath $certs_dir    = $::profile_consul::certs_dir,
+  Optional[String]     $root_ca_cert = $::profile_consul::root_ca_cert,
+  Optional[String]     $consul_cert  = $::profile_consul::consul_cert,
+  Optional[String]     $consul_key   = $::profile_consul::consul_key,
 ) {
-  file { '/etc/ssl/certs/consul':
+  file { $certs_dir:
     ensure => directory,
   }
-  file { '/etc/ssl/certs/consul/root-ca-cert.pem':
+  File {
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+    notify => Service['consul'],
+  }
+  file { $root_ca_file:
     ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
     content => $root_ca_cert,
-    notify  => Service['consul'],
   }
-  file { '/etc/ssl/certs/consul/consul_cert.pem':
+  file { $cert_file:
     ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
     content => $consul_cert,
-    notify  => Service['consul'],
   }
-  file { '/etc/ssl/certs/consul/consul_key.pem':
+  file { $key_file:
     ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
     content => $consul_key,
-    notify  => Service['consul'],
   }
 }

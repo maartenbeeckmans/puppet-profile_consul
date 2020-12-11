@@ -8,6 +8,16 @@ class profile_consul::firewall (
   Boolean             $ui                         = $::profile_consul::ui,
   Optional[String[1]] $join_wan                   = $::profile_consul::join_wan,
 ) {
+  firewall { '08600 allow consul DNS TCP':
+    dport  => 8600,
+    action => accept,
+    proto  => 'tcp',
+  }
+  firewall { '08600 allow consul DNS UDP':
+    dport  => 8600,
+    action => accept,
+    proto  => 'udp',
+  }
   if $connect {
     firewall { '08502 allow consul connect':
       dport  => 8502,
@@ -18,10 +28,15 @@ class profile_consul::firewall (
       action => 'accept',
     }
   }
+
   if $server {
     firewall { '08300 allow consul rpc':
       dport  => 8300,
       action => 'accept',
+    }
+    firewall { '08301 allow consul serf LAN':
+      dport  => 8301,
+      action => accept,
     }
     if $join_wan {
       firewall { '08302 allow consul serf WAN':
@@ -34,20 +49,6 @@ class profile_consul::firewall (
         dport  => 8500,
         action => 'accept',
       }
-    }
-    firewall { '08301 allow consul serf LAN':
-      dport  => 8301,
-      action => accept,
-    }
-    firewall { '08600 allow consul DNS TCP':
-      dport  => 8600,
-      action => accept,
-      proto  => 'tcp',
-    }
-    firewall { '08600 allow consul DNS UDP':
-      dport  => 8600,
-      action => accept,
-      proto  => 'udp',
     }
   }
 }
