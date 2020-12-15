@@ -22,7 +22,7 @@ class profile_consul::agent (
     bind_addr                => $bind_address,
     ca_file                  => $root_ca_file,
     cert_file                => $cert_file,
-    key_file                 => $cert_file,
+    key_file                 => $key_file,
     client_addr              => $client_address,
     data_dir                 => $data_dir,
     datacenter               => $datacenter,
