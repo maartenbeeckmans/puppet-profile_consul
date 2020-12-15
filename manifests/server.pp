@@ -51,6 +51,7 @@ class profile_consul::server (
     retry_join              => concat($server_nodes,$agent_nodes),
     server                  => true,
     ui                      => true,
+    verify_incomming        => true,
     verify_outgoing         => true,
     verify_server_hostname  => true,
     telemetry               => {
@@ -61,7 +62,8 @@ class profile_consul::server (
     addresses               => {
       http           => "127.0.0.1 ${facts['networking']['ip']}",
     },
-    enable_script_checks    => true,
+    enable_script_checks    => false,
+    disable_remote_exec     => true,
     enable_syslog           => true,
     leave_on_terminate      => true,
     rejoin_after_leave      => true,
