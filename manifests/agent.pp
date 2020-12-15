@@ -4,7 +4,7 @@
 class profile_consul::agent (
   Array[String]              $agent_nodes       = $::profile_consul::agent_nodes,
   Array[String]              $server_nodes      = $::profile_consul::server_nodes,
-  String                     $bind_address      = $::profile_consul::bind_addr,
+  String                     $bind_address      = $::profile_consul::bind_address,
   Stdlib::Absolutepath       $root_ca_file      = $::profile_consul::root_ca_file,
   Stdlib::Absolutepath       $cert_file         = $::profile_consul::cert_file,
   Stdlib::Absolutepath       $key_file          = $::profile_consul::key_file,

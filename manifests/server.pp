@@ -2,7 +2,7 @@
 #
 #
 class profile_consul::server (
-  String                     $bind_address      = $::profile_consul::bind_addr,
+  String                     $bind_address      = $::profile_consul::bind_address,
   Array[String]              $agent_nodes       = $::profile_consul::agent_nodes,
   Array[String]              $server_nodes      = $::profile_consul::server_nodes,
   Stdlib::Absolutepath       $root_ca_file      = $::profile_consul::root_ca_file,
