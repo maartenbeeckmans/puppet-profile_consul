@@ -26,7 +26,6 @@ class profile_consul (
   String                     $connect_sidecar_port_range,
   Stdlib::Absolutepath       $config_dir,
   String                     $options,
-  Optional[String[1]]        $join_wan,
   String                     $version,
   Boolean                    $manage_firewall_entry,
   Boolean                    $manage_repo,

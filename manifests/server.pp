@@ -22,7 +22,6 @@ class profile_consul::server (
   Stdlib::Port::Unprivileged $connect_grpc_port = $::profile_consul::connect_grpc_port,
   Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
   String                     $options           = $::profile_consul::options,
-  Optional[String[1]]        $join_wan          = $::profile_consul::join_wan,
   String                     $version           = $::profile_consul::version,
 ) {
   $config_hash = {
@@ -84,7 +83,6 @@ class profile_consul::server (
     group          => $group,
     manage_user    => $manage_user,
     manage_group   => $manage_group,
-    join_wan       => $join_wan,
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',

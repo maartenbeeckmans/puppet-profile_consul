@@ -15,7 +15,6 @@ class profile_consul::agent (
   String                     $node_name         = $::profile_consul::node_name,
   Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
   String                     $options           = $::profile_consul::options,
-  Optional[String[1]]        $join_wan          = $::profile_consul::join_wan,
   String                     $version           = $::profile_consul::version,
 ) {
   $_config_hash = {
@@ -53,7 +52,6 @@ class profile_consul::agent (
     config_dir     => $config_dir,
     config_hash    => $_config_hash,
     extra_options  => $options,
-    join_wan       => $join_wan,
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',

@@ -21,7 +21,6 @@ profile_consul::connect_grpc_port: 8502
 profile_consul::connect_sidecar_port_range: 21000-21255
 profile_consul::config_dir: /etc/consul.d
 profile_consul::options: -enable-script-checks -syslog
-profile_consul::join_wan: undef
 profile_consul::version: 1.9.1
 profile_consul::manage_firewall_entry: true
 profile_consul::manage_repo: true
