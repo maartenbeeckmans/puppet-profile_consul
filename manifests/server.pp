@@ -51,7 +51,6 @@ class profile_consul::server (
     retry_join              => concat($server_nodes,$agent_nodes),
     server                  => true,
     ui                      => true,
-    verify_incomming        => true,
     verify_outgoing         => true,
     verify_server_hostname  => true,
     telemetry               => {
