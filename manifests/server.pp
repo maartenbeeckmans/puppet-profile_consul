@@ -38,7 +38,7 @@ class profile_consul::server (
         '*' => '120s',
       }
     },
-    domain                  => $facts['networking']['domain'],
+    domain                  => $datacenter,
     encrypt                 => $encrypt_key,
     encrypt_verify_incoming => true,
     encrypt_verify_outgoing => true,
