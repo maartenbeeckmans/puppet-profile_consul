@@ -1,9 +1,10 @@
 ---
+profile_consul::bind_address: "%{facts.networking.ip}.yaml"
 profile_consul::agent_nodes: []
 profile_consul::server_nodes: []
 profile_consul::root_ca_file: "%{hiera('profile_consul::certs_dir')}/root_ca_cert.pem"
 profile_consul::cert_file: "%{hiera('profile_consul::certs_dir')}/consul_cert.pem"
-profile_consul::key: "%{hiera('profile_consul::certs_dir')}/consul_key.pem"
+profile_consul::key_file: "%{hiera('profile_consul::certs_dir')}/consul_key.pem"
 profile_consul::certs_dir: '/etc/ssl/certs/consul'
 profile_consul::client_address: '0.0.0.0'
 profile_consul::data_dir: '/var/lib/consul'
