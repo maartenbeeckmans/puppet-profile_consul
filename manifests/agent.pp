@@ -19,35 +19,35 @@ class profile_consul::agent (
   String                     $version           = $::profile_consul::version,
 ) {
   $_config_hash = {
-    bind_addr               => $bind_address,
-    ca_file                 => $root_ca_file,
-    cert_file               => $cert_file,
-    key_file                => $cert_file,
-    client_address          => $client_address,
-    data_dir                => $data_dir,
-    datacenter              => $datacenter,
-    dns_config              => {
+    bind_addr                => $bind_address,
+    ca_file                  => $root_ca_file,
+    cert_file                => $cert_file,
+    key_file                 => $cert_file,
+    client_addr              => $client_address,
+    data_dir                 => $data_dir,
+    datacenter               => $datacenter,
+    dns_config               => {
       service_ttl => {
         '*' => '120s',
       }
     },
-    domain                 => $facts['networking']['domain'],
-    encrypt                => $encrypt_key,
-    encryt_verify_incoming => true,
-    encryt_verify_outgoing => true,
-    log_level              => 'INFO',
-    node_name              => $node_name,
-    ports                  => {
+    domain                  => $facts['networking']['domain'],
+    encrypt                 => $encrypt_key,
+    encrypt_verify_incoming => true,
+    encrypt_verify_outgoing => true,
+    log_level               => 'INFO',
+    node_name               => $node_name,
+    ports                   => {
       http  => '-1',
       https => '8500',
     },
-    retry_join             => concat($server_nodes, $agent_nodes),
-    verify_outgoing        => true,
-    vefify_server_hostname => true,
-    enable_syslog          => true,
-    leave_on_terminate     => true,
-    rejoin_after_leave     => true,
-    advertise_addr         => $facts['networking']['ip'],
+    retry_join              => concat($server_nodes, $agent_nodes),
+    verify_outgoing         => true,
+    verify_server_hostname  => true,
+    enable_syslog           => true,
+    leave_on_terminate      => true,
+    rejoin_after_leave      => true,
+    advertise_addr          => $facts['networking']['ip'],
   }
   class { 'consul':
     config_dir     => $config_dir,

@@ -31,7 +31,7 @@ class profile_consul::server (
     ca_file                 => $root_ca_file,
     cert_file               => $cert_file,
     key_file                => $cert_file,
-    client_address          => $client_address,
+    client_addr             => $client_address,
     data_dir                => $data_dir,
     datacenter              => $datacenter,
     dns_config              => {
@@ -53,7 +53,7 @@ class profile_consul::server (
     server                  => true,
     ui                      => true,
     verify_outgoing         => true,
-    vefify_server_hostname  => true,
+    verify_server_hostname  => true,
     telemetry               => {
       prometheus_retention_time => '5m',
     },
