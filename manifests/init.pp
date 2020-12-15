@@ -53,18 +53,6 @@ class profile_consul (
   if $manage_repo {
     include profile_consul::repo
   }
-  if $manage_sd_service {
-    consul::service { $sd_service_name:
-      checks => [
-        {
-          http     => "http://${facts['networking']['ip']}:8500",
-          interval => '10s',
-        }
-      ],
-      port   => 8500,
-      tags   => $sd_service_tags,
-    }
-  }
 
   file { '/etc/profile.d/consul.sh':
     ensure  => file,

@@ -23,6 +23,9 @@ class profile_consul::server (
   Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
   String                     $options           = $::profile_consul::options,
   String                     $version           = $::profile_consul::version,
+  Boolean                    $manage_sd_service = $::profile_consul::manage_sd_service,
+  String                     $sd_service_name   = $::profile_consul::sd_service_name,
+  Array[String]              $sd_service_tags   = $::profile_consul::sd_service_tags,
 ) {
   $config_hash = {
     bind_addr               => $bind_address,
@@ -87,5 +90,17 @@ class profile_consul::server (
     version        => $version,
     install_method => 'package',
     bin_dir        => '/usr/bin',
+  }
+  if $manage_sd_service {
+    consul::service { $sd_service_name:
+      checks => [
+        {
+          http     => "https://${facts['networking']['ip']}:8500",
+          interval => '10s',
+        }
+      ],
+      port   => 8500,
+      tags   => $sd_service_tags,
+    }
   }
 }
