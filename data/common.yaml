@@ -1,5 +1,5 @@
 ---
-profile_consul::bind_address: "%{facts.networking.ip}.yaml"
+profile_consul::bind_address: "%{facts.networking.ip}"
 profile_consul::agent_nodes: []
 profile_consul::server_nodes: []
 profile_consul::root_ca_file: "%{hiera('profile_consul::certs_dir')}/root_ca_cert.pem"
