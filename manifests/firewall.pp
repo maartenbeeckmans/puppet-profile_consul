@@ -7,6 +7,10 @@ class profile_consul::firewall (
   Boolean             $server                     = $::profile_consul::server,
   Boolean             $ui                         = $::profile_consul::ui,
 ) {
+  firewall { '08301 allow consul serf LAN':
+    dport  => 8301,
+    action => accept,
+  }
   firewall { '08600 allow consul DNS TCP':
     dport  => 8600,
     action => accept,
@@ -32,10 +36,6 @@ class profile_consul::firewall (
     firewall { '08300 allow consul rpc':
       dport  => 8300,
       action => 'accept',
-    }
-    firewall { '08301 allow consul serf LAN':
-      dport  => 8301,
-      action => accept,
     }
     if $ui {
       firewall { '08500 allow consul ui':

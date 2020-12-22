@@ -42,7 +42,6 @@ class profile_consul::server (
         '*' => '120s',
       }
     },
-    domain                  => $datacenter,
     encrypt                 => $encrypt_key,
     encrypt_verify_incoming => true,
     encrypt_verify_outgoing => true,
