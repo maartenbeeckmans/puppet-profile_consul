@@ -13,6 +13,7 @@ class profile_consul::agent (
   String                     $datacenter        = $::profile_consul::datacenter,
   String                     $encrypt_key       = $::profile_consul::encrypt_key,
   String                     $node_name         = $::profile_consul::node_name,
+  String                     $advertise_address = $::profile_consul::advertise_address,
   Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
   String                     $options           = $::profile_consul::options,
   String                     $version           = $::profile_consul::version,
@@ -46,7 +47,7 @@ class profile_consul::agent (
     enable_syslog           => true,
     leave_on_terminate      => true,
     rejoin_after_leave      => true,
-    advertise_addr          => $facts['networking']['ip'],
+    advertise_addr          => $advertise_address,
   }
   class { 'consul':
     config_dir     => $config_dir,

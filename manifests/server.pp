@@ -16,6 +16,7 @@ class profile_consul::server (
   Boolean                    $ui                = $::profile_consul::ui,
   String                     $user              = $::profile_consul::user,
   String                     $group             = $::profile_consul::group,
+  String                     $advertise_address = $::profile_consul::advertise_address,
   Boolean                    $manage_user       = $::profile_consul::manage_user,
   Boolean                    $manage_group      = $::profile_consul::manage_group,
   Boolean                    $connect           = $::profile_consul::connect,
@@ -60,9 +61,9 @@ class profile_consul::server (
       prometheus_retention_time => '5m',
     },
     start_join              => $server_nodes,
-    advertise_addr          => $facts['networking']['ip'],
+    advertise_addr          => $advertise_address,
     addresses               => {
-      http           => "127.0.0.1 ${facts['networking']['ip']}",
+      http           => "127.0.0.1 ${advertise_address}",
     },
     enable_script_checks    => false,
     disable_remote_exec     => true,
@@ -95,7 +96,7 @@ class profile_consul::server (
     consul::service { $sd_service_name:
       checks => [
         {
-          http     => "https://${facts['networking']['ip']}:8500",
+          http     => "https://${advertise_address}:8500",
           interval => '10s',
         }
       ],

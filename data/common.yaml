@@ -19,6 +19,7 @@ profile_consul::manage_group: true
 profile_consul::connect: true
 profile_consul::connect_grpc_port: 8502
 profile_consul::connect_sidecar_port_range: 21000-21255
+profile_consul::advertise_address: "%{facts.networking.ip}"
 profile_consul::config_dir: /etc/consul.d
 profile_consul::options: -enable-script-checks -syslog
 profile_consul::version: 1.9.1

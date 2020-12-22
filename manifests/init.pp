@@ -21,6 +21,7 @@ class profile_consul (
   String                     $group,
   Boolean                    $manage_user,
   Boolean                    $manage_group,
+  String                     $advertise_address,
   Boolean                    $connect,
   Stdlib::Port::Unprivileged $connect_grpc_port,
   String                     $connect_sidecar_port_range,
@@ -57,7 +58,7 @@ class profile_consul (
   file { '/etc/profile.d/consul.sh':
     ensure  => file,
     mode    => '0644',
-    content => "export CONSUL_HTTP_ADDR=https://${facts['networking']['ip']}:8500\nexport CONSUL_CACERT=${root_ca_file}",
+    content => "export CONSUL_HTTP_ADDR=https://${advertise_address}:8500\nexport CONSUL_CACERT=${root_ca_file}",
   }
   create_resources(consul::check, $checks)
   create_resources(consul::service, $services)
