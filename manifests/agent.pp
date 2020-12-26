@@ -37,8 +37,8 @@ class profile_consul::agent (
     log_level               => 'INFO',
     node_name               => $node_name,
     ports                   => {
-      http  => '-1',
-      https => '8500',
+      http  => -1,
+      https => 8500,
     },
     retry_join              => concat($server_nodes, $agent_nodes),
     verify_outgoing         => true,
