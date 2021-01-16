@@ -34,3 +34,6 @@ profile_consul::sd_service_tags: []
 profile_consul::checks: {}
 profile_consul::services: {}
 profile_consul::watches: {}
+profile_consul::consul_backup: true
+profile_consul::backup_dir: '/srv/consul_backup'
+profile_consul::backup_ssh_command: '/usr/bin/ssh -T -x -p 22 -i /srv/rsnapshot/rsnapshot_key -o UserKnownHostsFile=/etc/rsnapshot_known_hosts'

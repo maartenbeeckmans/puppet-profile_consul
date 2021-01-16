@@ -39,6 +39,9 @@ class profile_consul (
   Hash                       $checks,
   Hash                       $services,
   Hash                       $watches,
+  Boolean                    $consul_backup,
+  Stdlib::Absolutepath       $backup_dir,
+  String                     $backup_ssh_command,
 ) {
   if $server {
     include profile_consul::server

@@ -27,6 +27,7 @@ class profile_consul::server (
   Boolean                    $manage_sd_service = $::profile_consul::manage_sd_service,
   String                     $sd_service_name   = $::profile_consul::sd_service_name,
   Array[String]              $sd_service_tags   = $::profile_consul::sd_service_tags,
+  Boolean                    $consul_backup     = $::profile_consul::consul_backup,
 ) {
   $config_hash = {
     bind_addr               => $bind_address,
@@ -102,5 +103,8 @@ class profile_consul::server (
       port   => 8500,
       tags   => $sd_service_tags,
     }
+  }
+  if $consul_backup {
+    include profile_consul::backup
   }
 }

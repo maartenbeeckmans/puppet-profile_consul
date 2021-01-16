@@ -1,0 +1,9 @@
+<%- | String               $advertise_address,
+      Stdlib::Absolutepath $root_ca_file,
+      Stdlib::Absolutepath $backup_dir,
+| -%>
+#!/bin/bash
+# File managed by Puppet
+export CONSUL_HTTP_ADDR=https://<%= $advertise_address -%>:8500
+export CONSUL_CACERT=<%= $root_ca_file %>
+/usr/bin/consul snapshot save <%= $backup_dir -%>/consul_data.snapshot
