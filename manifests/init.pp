@@ -42,6 +42,7 @@ class profile_consul (
   Boolean                    $consul_backup,
   Stdlib::Absolutepath       $backup_dir,
   String                     $backup_ssh_command,
+  Boolean                    $manage_prometheus_exporter,
 ) {
   if $server {
     include profile_consul::server

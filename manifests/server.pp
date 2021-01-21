@@ -2,32 +2,33 @@
 #
 #
 class profile_consul::server (
-  String                     $bind_address      = $::profile_consul::bind_address,
-  Array[String]              $agent_nodes       = $::profile_consul::agent_nodes,
-  Array[String]              $server_nodes      = $::profile_consul::server_nodes,
-  Stdlib::Absolutepath       $root_ca_file      = $::profile_consul::root_ca_file,
-  Stdlib::Absolutepath       $cert_file         = $::profile_consul::cert_file,
-  Stdlib::Absolutepath       $key_file          = $::profile_consul::key_file,
-  String                     $client_address    = $::profile_consul::client_address,
-  Stdlib::Absolutepath       $data_dir          = $::profile_consul::data_dir,
-  String                     $datacenter        = $::profile_consul::datacenter,
-  String                     $encrypt_key       = $::profile_consul::encrypt_key,
-  String                     $node_name         = $::profile_consul::node_name,
-  Boolean                    $ui                = $::profile_consul::ui,
-  String                     $user              = $::profile_consul::user,
-  String                     $group             = $::profile_consul::group,
-  String                     $advertise_address = $::profile_consul::advertise_address,
-  Boolean                    $manage_user       = $::profile_consul::manage_user,
-  Boolean                    $manage_group      = $::profile_consul::manage_group,
-  Boolean                    $connect           = $::profile_consul::connect,
-  Stdlib::Port::Unprivileged $connect_grpc_port = $::profile_consul::connect_grpc_port,
-  Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
-  String                     $options           = $::profile_consul::options,
-  String                     $version           = $::profile_consul::version,
-  Boolean                    $manage_sd_service = $::profile_consul::manage_sd_service,
-  String                     $sd_service_name   = $::profile_consul::sd_service_name,
-  Array[String]              $sd_service_tags   = $::profile_consul::sd_service_tags,
-  Boolean                    $consul_backup     = $::profile_consul::consul_backup,
+  String                     $bind_address               = $::profile_consul::bind_address,
+  Array[String]              $agent_nodes                = $::profile_consul::agent_nodes,
+  Array[String]              $server_nodes               = $::profile_consul::server_nodes,
+  Stdlib::Absolutepath       $root_ca_file               = $::profile_consul::root_ca_file,
+  Stdlib::Absolutepath       $cert_file                  = $::profile_consul::cert_file,
+  Stdlib::Absolutepath       $key_file                   = $::profile_consul::key_file,
+  String                     $client_address             = $::profile_consul::client_address,
+  Stdlib::Absolutepath       $data_dir                   = $::profile_consul::data_dir,
+  String                     $datacenter                 = $::profile_consul::datacenter,
+  String                     $encrypt_key                = $::profile_consul::encrypt_key,
+  String                     $node_name                  = $::profile_consul::node_name,
+  Boolean                    $ui                         = $::profile_consul::ui,
+  String                     $user                       = $::profile_consul::user,
+  String                     $group                      = $::profile_consul::group,
+  String                     $advertise_address          = $::profile_consul::advertise_address,
+  Boolean                    $manage_user                = $::profile_consul::manage_user,
+  Boolean                    $manage_group               = $::profile_consul::manage_group,
+  Boolean                    $connect                    = $::profile_consul::connect,
+  Stdlib::Port::Unprivileged $connect_grpc_port          = $::profile_consul::connect_grpc_port,
+  Stdlib::Absolutepath       $config_dir                 = $::profile_consul::config_dir,
+  String                     $options                    = $::profile_consul::options,
+  String                     $version                    = $::profile_consul::version,
+  Boolean                    $manage_sd_service          = $::profile_consul::manage_sd_service,
+  String                     $sd_service_name            = $::profile_consul::sd_service_name,
+  Array[String]              $sd_service_tags            = $::profile_consul::sd_service_tags,
+  Boolean                    $consul_backup              = $::profile_consul::consul_backup,
+  Boolean                    $manage_prometheus_exporter = $::profile_consul::manage_prometheus_exporter,
 ) {
   $config_hash = {
     bind_addr               => $bind_address,
@@ -107,5 +108,8 @@ class profile_consul::server (
   }
   if $consul_backup {
     include profile_consul::backup
+  }
+  if $manage_prometheus_exporter {
+    include profile_prometheus::consul_exporter
   }
 }
