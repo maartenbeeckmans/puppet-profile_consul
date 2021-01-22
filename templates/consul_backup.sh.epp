@@ -4,6 +4,13 @@
 | -%>
 #!/bin/bash
 # File managed by Puppet
-export CONSUL_HTTP_ADDR=https://<%= $advertise_address -%>:8500
-export CONSUL_CACERT=<%= $root_ca_file %>
-/usr/bin/consul snapshot save <%= $backup_dir -%>/consul_data.snapshot
+CONSUL_HTTP_ADDR=https://<%= $advertise_address -%>:8500
+CONSUL_CACERT=<%= $root_ca_file %>
+DAYS_TO_KEEP=5
+
+/usr/bin/consul snapshot save <%= $backup_dir -%>/"consul_data-`date +'%y%m%d_%H:%M'`.snapshot"
+
+echo 'Inspecting backup'
+/usr/bin/consul snapshot inspect <%= $backup_dir -%>/"consul_data-`date +'%y%m%d_%H:%M'`.snapshot" > "consul_data--`date +'%y%m%d_%H:%M'`.metadata"
+
+[[ '<%= $backup_dir -%>' != '/' ]] && find '<%= $backup_dir -%>' -maxdepth 1 -mtime +"${DAYS_TO_KEEP}" -exec rm -rf '{}' \;
