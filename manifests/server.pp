@@ -3,8 +3,6 @@
 #
 class profile_consul::server (
   String                     $bind_address               = $::profile_consul::bind_address,
-  Array[String]              $agent_nodes                = $::profile_consul::agent_nodes,
-  Array[String]              $server_nodes               = $::profile_consul::server_nodes,
   Stdlib::Absolutepath       $root_ca_file               = $::profile_consul::root_ca_file,
   Stdlib::Absolutepath       $cert_file                  = $::profile_consul::cert_file,
   Stdlib::Absolutepath       $key_file                   = $::profile_consul::key_file,
@@ -30,9 +28,14 @@ class profile_consul::server (
   Boolean                    $consul_backup              = $::profile_consul::consul_backup,
   Boolean                    $manage_prometheus_exporter = $::profile_consul::manage_prometheus_exporter,
 ) {
+  $_server_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_consul::Server\" }")
+  $_server_nodes = sort($_server_results.map | $result | { $result['certname'] })
+  $_agent_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_consul::Agent\" }")
+  $_agent_nodes = sort($_agent_results.map | $result | { $result['certname'] })
+
   $config_hash = {
     bind_addr               => $bind_address,
-    bootstrap_expect        => size($server_nodes),
+    bootstrap_expect        => size($_server_nodes),
     ca_file                 => $root_ca_file,
     cert_file               => $cert_file,
     key_file                => $key_file,
@@ -53,7 +56,7 @@ class profile_consul::server (
       http     => -1,
       https    => 8500,
     },
-    retry_join              => concat($server_nodes,$agent_nodes),
+    retry_join              => concat($_server_nodes,$_agent_nodes),
     server                  => true,
     ui                      => true,
     verify_outgoing         => true,
@@ -61,7 +64,7 @@ class profile_consul::server (
     telemetry               => {
       prometheus_retention_time => '5m',
     },
-    start_join              => $server_nodes,
+    start_join              => $_server_nodes,
     advertise_addr          => $advertise_address,
     addresses               => {
       http           => "127.0.0.1 ${advertise_address}",

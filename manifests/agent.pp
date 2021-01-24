@@ -2,8 +2,6 @@
 #
 #
 class profile_consul::agent (
-  Array[String]              $agent_nodes       = $::profile_consul::agent_nodes,
-  Array[String]              $server_nodes      = $::profile_consul::server_nodes,
   String                     $bind_address      = $::profile_consul::bind_address,
   Stdlib::Absolutepath       $root_ca_file      = $::profile_consul::root_ca_file,
   Stdlib::Absolutepath       $cert_file         = $::profile_consul::cert_file,
@@ -18,6 +16,11 @@ class profile_consul::agent (
   String                     $options           = $::profile_consul::options,
   String                     $version           = $::profile_consul::version,
 ) {
+  $_server_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_consul::Server\" }")
+  $_server_nodes = sort($_server_results.map | $result | { $result['certname'] })
+  $_agent_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_consul::Agent\" }")
+  $_agent_nodes = sort($_agent_results.map | $result | { $result['certname'] })
+
   $_config_hash = {
     bind_addr                => $bind_address,
     ca_file                  => $root_ca_file,
@@ -40,7 +43,7 @@ class profile_consul::agent (
       http  => -1,
       https => 8500,
     },
-    retry_join              => concat($server_nodes, $agent_nodes),
+    retry_join              => concat($_server_nodes, $_agent_nodes),
     verify_outgoing         => true,
     verify_server_hostname  => true,
     enable_syslog           => true,

@@ -1,8 +1,6 @@
 #
 class profile_consul (
   String                     $bind_address,
-  Array[String]              $agent_nodes,
-  Array[String]              $server_nodes,
   Stdlib::Absolutepath       $root_ca_file,
   Stdlib::Absolutepath       $cert_file,
   Stdlib::Absolutepath       $key_file,
