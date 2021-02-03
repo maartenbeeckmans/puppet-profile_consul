@@ -6,14 +6,24 @@ class profile_consul::repo (
   Stdlib::HTTPUrl $repo_gpg_url = $::profile_consul::repo_gpg_url,
   Stdlib::HTTPUrl $repo_url     = $::profile_consul::repo_url,
 ) {
-  # Adding if not defined so it can be used together with profile_nomad and profile_Vault
-  if ! defined(Apt::Source['Hashicorp']) {
-    apt::source { 'Hashicorp':
-      location => $repo_url,
-      repos    => 'main',
-      key      => {
-        id     => $repo_gpg_key,
-        server => $repo_gpg_url,
+  if $facts['os']['family'] == 'RedHat' {
+    if ! defined(Yumrepo['Hashicorp']) {
+      yumrepo { 'Hashicorp':
+        ensure   => present,
+        baseurl  => $repo_url,
+        gpgcheck => true,
+        gpgkey   => $repo_gpg_key,
+      }
+    }
+  } else {
+    if ! defined(Apt::Source['Hashicorp']) {
+      apt::source { 'Hashicorp':
+        location => $repo_url,
+        repos    => 'main',
+        key      => {
+          id     => $repo_gpg_key,
+          server => $repo_gpg_url,
+        }
       }
     }
   }
