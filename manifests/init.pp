@@ -28,9 +28,6 @@ class profile_consul (
   String                     $version,
   Boolean                    $manage_firewall_entry,
   Boolean                    $manage_repo,
-  String                     $repo_gpg_key,
-  Stdlib::HTTPUrl            $repo_gpg_url,
-  Stdlib::HTTPUrl            $repo_url,
   Boolean                    $manage_sd_service,
   String                     $sd_service_name,
   Array[String]              $sd_service_tags,
@@ -54,7 +51,7 @@ class profile_consul (
     include profile_consul::firewall
   }
   if $manage_repo {
-    include profile_consul::repo
+    include hashi_stack::repo
   }
 
   file { '/etc/profile.d/consul.sh':
