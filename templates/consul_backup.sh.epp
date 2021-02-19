@@ -4,9 +4,9 @@
 | -%>
 #!/bin/bash
 # File managed by Puppet
-CONSUL_HTTP_ADDR=https://<%= $advertise_address -%>:8500
-CONSUL_CACERT=<%= $root_ca_file %>
-DAYS_TO_KEEP=5
+export CONSUL_HTTP_ADDR=https://<%= $advertise_address -%>:8500
+export CONSUL_CACERT=<%= $root_ca_file %>
+export DAYS_TO_KEEP=5
 
 /usr/bin/consul snapshot save <%= $backup_dir -%>/"consul_data-`date +'%y%m%d_%H:%M'`.snapshot"
 
