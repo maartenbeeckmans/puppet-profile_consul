@@ -23,7 +23,7 @@ profile_consul::options: -enable-script-checks -syslog
 profile_consul::version: 1.9.1
 profile_consul::manage_firewall_entry: true
 profile_consul::manage_repo: true
-profile_consul::sd_service_name: consul-ui
+profile_consul::sd_service_name: consul_ui
 profile_consul::sd_service_tags: []
 profile_consul::checks: {}
 profile_consul::services: {}

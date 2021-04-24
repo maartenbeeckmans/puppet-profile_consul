@@ -54,7 +54,7 @@ class profile_consul (
     include hashi_stack::repo
   }
   if $manage_sd_service {
-    consul::service { 'consul-dns':
+    consul::service { 'consul_dns':
       checks => [
         {
           tcp      => "${advertise_address}:8600",
