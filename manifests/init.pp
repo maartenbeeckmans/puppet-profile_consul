@@ -28,7 +28,6 @@ class profile_consul (
   String                     $version,
   Boolean                    $manage_firewall_entry,
   Boolean                    $manage_repo,
-  Boolean                    $manage_sd_service,
   String                     $sd_service_name,
   Array[String]              $sd_service_tags,
   Hash                       $checks,
@@ -38,6 +37,7 @@ class profile_consul (
   Stdlib::Absolutepath       $backup_dir,
   String                     $backup_ssh_command,
   Boolean                    $manage_prometheus_exporter,
+  Boolean                    $manage_sd_service            = lookup('manage_sd_service', Boolean, first, true),
 ) {
   if $server {
     include profile_consul::server
@@ -52,6 +52,17 @@ class profile_consul (
   }
   if $manage_repo {
     include hashi_stack::repo
+  }
+  if $manage_sd_service {
+    consul::service { 'consul-dns':
+      checks => [
+        {
+          tcp      => "${advertise_address}:8600",
+          interval => '10s',
+        }
+      ],
+      port   => Integer($port),
+    }
   }
 
   file { '/etc/profile.d/consul.sh':
