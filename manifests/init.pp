@@ -61,7 +61,7 @@ class profile_consul (
           interval => '10s',
         }
       ],
-      port   => Integer($port),
+      port   => 8600,
     }
   }
 
