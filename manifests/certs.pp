@@ -23,15 +23,15 @@ class profile_consul::certs (
   if $use_puppet_certs {
     file { $root_ca_file:
       ensure => present,
-      source => $facts['extlib.puppet_config']['localcacert'],
+      source => $facts['extlib.puppet_config']['main']['localcacert'],
     }
     file { $cert_file:
       ensure => present,
-      source => $facts['extlib.puppet_config']['hostcert'],
+      source => $facts['extlib.puppet_config']['main']['hostcert'],
     }
     file { $key_file:
       ensure => present,
-      source => $facts['extlib.puppet_config']['hostprivkey'],
+      source => $facts['extlib.puppet_config']['main']['hostprivkey'],
     }
   } else {
     file { $root_ca_file:
