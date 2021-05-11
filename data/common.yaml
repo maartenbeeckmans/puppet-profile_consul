@@ -4,6 +4,10 @@ profile_consul::root_ca_file: "%{hiera('profile_consul::certs_dir')}/root_ca_cer
 profile_consul::cert_file: "%{hiera('profile_consul::certs_dir')}/consul_cert.pem"
 profile_consul::key_file: "%{hiera('profile_consul::certs_dir')}/consul_key.pem"
 profile_consul::certs_dir: '/etc/ssl/certs/consul'
+profile_consul::use_puppet_certs: true
+profile_consul::root_ca_cert: ~
+profile_consul::consul_cert: ~
+profile_consul::consul_key: ~
 profile_consul::client_address: '0.0.0.0'
 profile_consul::data_dir: '/var/lib/consul'
 profile_consul::datacenter: 'beeckmans'
