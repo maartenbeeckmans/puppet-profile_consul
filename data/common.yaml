@@ -11,7 +11,7 @@ profile_consul::consul_key: ~
 profile_consul::client_address: '0.0.0.0'
 profile_consul::data_dir: '/var/lib/consul'
 profile_consul::datacenter: 'beeckmans'
-profile_consul::node_name: "%{::fqdn}"
+profile_consul::node_name: "%{facts.networking.fqdn}"
 profile_consul::server: false
 profile_consul::ui: true
 profile_consul::user: 'consul'
