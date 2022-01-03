@@ -12,6 +12,8 @@ class profile_consul::agent (
   String                     $encrypt_key       = $::profile_consul::encrypt_key,
   String                     $node_name         = $::profile_consul::node_name,
   String                     $advertise_address = $::profile_consul::advertise_address,
+  Boolean                    $connect           = $::profile_consul::connect,
+  Stdlib::Port::Unprivileged $connect_grpc_port = $::profile_consul::connect_grpc_port,
   Stdlib::Absolutepath       $config_dir        = $::profile_consul::config_dir,
   String                     $options           = $::profile_consul::options,
   String                     $version           = $::profile_consul::version,
@@ -21,7 +23,7 @@ class profile_consul::agent (
   $_agent_results = puppetdb_query("resources[certname] { type=\"Class\" and title = \"Profile_consul::Agent\" }")
   $_agent_nodes = sort($_agent_results.map | $result | { $result['certname'] })
 
-  $_config_hash = {
+  $config_hash = {
     bind_addr                => $bind_address,
     ca_file                  => $root_ca_file,
     cert_file                => $cert_file,
@@ -50,6 +52,15 @@ class profile_consul::agent (
     leave_on_terminate      => true,
     rejoin_after_leave      => true,
     advertise_addr          => $advertise_address,
+  }
+  if $connect {
+    $_connect_config = {
+      'connect' => { 'enabled' => true },
+      'ports'   => { 'grpc' => $connect_grpc_port },
+    }
+    $_config_hash = deep_merge($_connect_config, $config_hash)
+  } else {
+    $_config_hash = $config_hash
   }
   class { 'consul':
     config_dir     => $config_dir,
